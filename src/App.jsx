@@ -3,17 +3,32 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 // ===Компоненты проекта===
-import ErrorMessage from "./ErrorMessage/ErrorMessage";
-import ImageGallery from "./ImageGallery/ImageGallery";
-import Loader from "./Loader/Loader";
-import LoadMoreButton from "./LoadMoreButton/LoadMoreButton";
-import SearchBar from "./SearchBar/SearchBar";
+import ErrorMessage from "./Components/ErrorMessage/ErrorMessage";
+import ImageGallery from "./Components/ImageGallery/ImageGallery";
+import Loader from "./Components/Loader/Loader";
+import LoadMoreButton from "./Components/LoadMoreButton/LoadMoreButton";
+import SearchBar from "./Components/SearchBar/SearchBar";
+import ImageModal from "./Components/Modal/ImageModal";
 
 function App() {
+  const [photosToShow, setPhotosToShow] = useState(null);
+  const [page, setPage] = useState(0);
   const [query, setQuery] = useState("");
-  const [showPhotos, setShowPhotos] = useState([]);
+  const [total_pages, setTotal_pages] = useState(0);
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [bigImage, setBigImage] = useState(null);
 
-  // const [page, setPage] = useState("");
+  const handleQuery = (searchTerm) => {
+    setQuery(searchTerm);
+    setPhotosToShow([]);
+    setPage(1);
+  };
+
+  const handleSearchPage = () => {
+    setPage((prev) => prev + 1);
+  };
 
   const API_KEY = "S1N3fDA23y_hQUTZth1WPkovmsIIT0wVqJFI2s7qIiI";
 
@@ -21,44 +36,61 @@ function App() {
     baseURL: "https://api.unsplash.com/",
   });
 
-  const handleSearchTerm = (queryTerm) => {
-    console.log("queryTerm:", queryTerm);
-    setQuery(queryTerm);
-    fetchPhotos(query);
+  useEffect(() => {
+    const fetchData = async (query, page) => {
+      if (!query) return;
+
+      setIsLoading(true);
+      try {
+        const response = await instance.get(
+          `search/photos/?client_id=${API_KEY}&query=${query}&page=${page}&per_page=12`,
+        );
+        setTotal_pages(response.data.total_pages);
+
+        setPhotosToShow((prev) => [...prev, ...response.data.results]);
+        console.log(response);
+        console.log(response.data.results);
+        console.log(response.data.total_pages);
+      } catch (error) {
+        console.error(error);
+        setError("true");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData(query, page);
+  }, [query, page]);
+
+  // === Управление модальным окном ===
+  const openModal = (bigImage) => {
+    setIsOpen(true);
+    setBigImage(bigImage);
   };
 
-  const fetchPhotos = async (query) => {
-    try {
-      const response = await instance.get(
-        `/photos/?client_id=${API_KEY}&query=${query}`,
-      );
-      console.log(response.data);
-      response.data.map(({ id, urls: { small, regular }, description }) => {
-        const Image = {
-          id: { id },
-          small: { small },
-          regular: { regular },
-          description: {description},
-        };
-        console.log(Image);
-        setShowPhotos((prevShowPhotos) => [...prevShowPhotos, Image]);
-      });
-
-      console.log(showPhotos);
-    } catch (error) {
-      console.log(error);
-    }
+  const closeModal = () => {
+    setIsOpen(false);
   };
 
   return (
     <>
-      <SearchBar handleSearch={handleSearchTerm} />
-      {/* <Loader />
-       */}
-      <ImageGallery
-        gallery={showPhotos} />
-      <ErrorMessage />
-      <LoadMoreButton />
+      <SearchBar handleQuery={handleQuery} />
+      {Array.isArray(photosToShow) && (
+        <ImageGallery gallery={photosToShow} handleModal={openModal} />
+      )}
+
+      {page < total_pages && (
+        <LoadMoreButton handleLoadMore={handleSearchPage} />
+      )}
+      {isLoading && <Loader />}
+      {error && <ErrorMessage />}
+      {modalIsOpen && (
+        <ImageModal
+          isOpen={modalIsOpen}
+          onRequestClose={closeModal}
+          image={bigImage}
+        />
+      )}
     </>
   );
 }

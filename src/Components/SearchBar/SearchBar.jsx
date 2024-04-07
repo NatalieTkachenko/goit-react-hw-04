@@ -5,22 +5,24 @@ import toast, { Toaster } from "react-hot-toast";
 // === Стили ===
 import styles from "./SearchBar.module.css";
 
-export default function SearchBar({ handleSearch }) {
-  const [SearchCriteria, setSearchCriteria] = useState("");
+export default function SearchBar({ handleQuery }) {
+  const [searchCriteria, setSearchCriteria] = useState("");
   const notify = () => toast("Please enter the search criteria");
 
   const handleChange = (event) => {
     setSearchCriteria(event.target.value.trim());
-    console.log(SearchCriteria);
+    console.log(searchCriteria);
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (!SearchCriteria) {
+    if (!searchCriteria) {
       notify();
       return;
     } else {
-      console.log("got you, looking for it");
-      handleSearch(SearchCriteria);
+      console.log("got you, looking for:", searchCriteria);
+      handleQuery(searchCriteria);
+      setSearchCriteria("");
+      event.target.reset();
     }
   };
 
@@ -35,7 +37,7 @@ export default function SearchBar({ handleSearch }) {
           autoComplete="off"
           autoFocus
           placeholder="Search images and photos"
-          name={SearchCriteria}
+          name={searchCriteria}
           onChange={handleChange}
         />
         <button className={styles.button} type="submit">
