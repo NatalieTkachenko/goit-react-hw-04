@@ -1,5 +1,20 @@
-import { Hourglass } from "react-loader-spinner";
+// === Компоненты проекта ===
+import { ThreeDots } from "react-loader-spinner";
 
+// === Стили компонентов проекта ===
+import styles from "./Loader.module.css";
 export default function Loader() {
-  return <Hourglass />;
+  return (
+    <div className={styles.container}>
+    <ThreeDots
+  visible={true}
+  height="70"
+  width="70"
+  color="#007bff"
+  radius="30"
+  ariaLabel="three-dots-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+      />
+      </div>)
 }

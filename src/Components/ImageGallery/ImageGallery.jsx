@@ -2,6 +2,7 @@
 // === Components ===
 import ImageCard from "../ImageCard/ImageCard";
 // === Styles
+import styles from "./ImageGalery.module.css";
 
 export default function ImageGallery({ gallery, handleModal }) {
   console.log(Array.isArray(gallery));
@@ -13,7 +14,7 @@ export default function ImageGallery({ gallery, handleModal }) {
 
   return (
     <>
-      <ul>
+      <ul className={styles.gridcontainer}>
         {gallery.map(({ id, urls: { small, regular }, description }) => {
           return (
             <li key={id}>

@@ -2,6 +2,9 @@
 import { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 
+// === Компоненты проекта ===
+import { FcSearch } from "react-icons/fc";
+
 // === Стили ===
 import styles from "./SearchBar.module.css";
 
@@ -11,7 +14,6 @@ export default function SearchBar({ handleQuery }) {
 
   const handleChange = (event) => {
     setSearchCriteria(event.target.value.trim());
-    console.log(searchCriteria);
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +21,6 @@ export default function SearchBar({ handleQuery }) {
       notify();
       return;
     } else {
-      console.log("got you, looking for:", searchCriteria);
       handleQuery(searchCriteria);
       setSearchCriteria("");
       event.target.reset();
@@ -28,8 +29,35 @@ export default function SearchBar({ handleQuery }) {
 
   return (
     <header>
-      <Toaster />
+      <Toaster
+      position="top-right"
+  reverseOrder={false}
+  gutter={50}
+  containerClassName=""
+  containerStyle={{}}
+  toastOptions={{
+    // Define default options
+    className: '',
+    duration: 3000,
+    style: {
+      width: '500px',
+      background: '#4da8ff',
+      color: '#fff',
+      fontSize:"20px",
+    },
+
+    
+    
+  }}
+      
+      
+      
+      
+      />
       <form className={styles.container} onSubmit={handleSubmit}>
+        <button className={styles.button} type="submit">
+          <FcSearch className={styles.icon} />
+        </button>
         <input
           className={styles.input}
           id="search"
@@ -40,10 +68,6 @@ export default function SearchBar({ handleQuery }) {
           name={searchCriteria}
           onChange={handleChange}
         />
-        <button className={styles.button} type="submit">
-          {" "}
-          Search
-        </button>
       </form>
     </header>
   );
