@@ -30,29 +30,22 @@ export default function SearchBar({ handleQuery }) {
   return (
     <header>
       <Toaster
-      position="top-right"
-  reverseOrder={false}
-  gutter={50}
-  containerClassName=""
-  containerStyle={{}}
-  toastOptions={{
-    // Define default options
-    className: '',
-    duration: 3000,
-    style: {
-      width: '500px',
-      background: '#4da8ff',
-      color: '#fff',
-      fontSize:"20px",
-    },
-
-    
-    
-  }}
-      
-      
-      
-      
+        position="top-right"
+        reverseOrder={false}
+        gutter={50}
+        containerClassName=""
+        containerStyle={{}}
+        toastOptions={{
+          // Define default options
+          className: "",
+          duration: 3000,
+          style: {
+            width: "500px",
+            background: "#4da8ff",
+            color: "#fff",
+            fontSize: "20px",
+          },
+        }}
       />
       <form className={styles.container} onSubmit={handleSubmit}>
         <button className={styles.button} type="submit">

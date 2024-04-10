@@ -8,7 +8,7 @@ import ImageGallery from "./Components/ImageGallery/ImageGallery";
 import Loader from "./Components/Loader/Loader";
 import LoadMoreButton from "./Components/LoadMoreButton/LoadMoreButton";
 import SearchBar from "./Components/SearchBar/SearchBar";
-import ImageModal from "./Components/Modal/ImageModal";
+import ImageModal from "./Components/ImageModal/ImageModal";
 
 function App() {
   const [photosToShow, setPhotosToShow] = useState(null);
@@ -48,11 +48,7 @@ function App() {
         setTotal_pages(response.data.total_pages);
 
         setPhotosToShow((prev) => [...prev, ...response.data.results]);
-        console.log(response);
-        console.log(response.data.results);
-        console.log(response.data.total_pages);
       } catch (error) {
-        console.error(error);
         setError("true");
       } finally {
         setIsLoading(false);

@@ -5,19 +5,16 @@ import ImageCard from "../ImageCard/ImageCard";
 import styles from "./ImageGalery.module.css";
 
 export default function ImageGallery({ gallery, handleModal }) {
-  console.log(Array.isArray(gallery));
-  console.log(gallery[0]);
-
   const handleClick = (bigImage) => {
     handleModal(bigImage);
   };
 
   return (
     <>
-      <ul className={styles.gridcontainer}>
+      <ul className={styles.gridContainer}>
         {gallery.map(({ id, urls: { small, regular }, description }) => {
           return (
-            <li key={id}>
+            <li className={styles.gridlI} key={id}>
               <ImageCard
                 src={small}
                 alt={description}
