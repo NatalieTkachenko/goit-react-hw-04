@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 // ===Компоненты проекта===
-import ErrorMessage from "./Components/ErrorMessage/ErrorMessage";
-import ImageGallery from "./Components/ImageGallery/ImageGallery";
-import Loader from "./Components/Loader/Loader";
-import LoadMoreButton from "./Components/LoadMoreButton/LoadMoreButton";
-import SearchBar from "./Components/SearchBar/SearchBar";
-import ImageModal from "./Components/ImageModal/ImageModal";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import ImageGallery from "./components/ImageGallery/ImageGallery";
+import Loader from "./components/Loader/Loader";
+import LoadMoreButton from "./components/LoadMoreButton/LoadMoreButton";
+import SearchBar from "./components/SearchBar/SearchBar";
+import ImageModal from "./components/ImageModal/ImageModal";
 
 function App() {
   const [photosToShow, setPhotosToShow] = useState(null);
