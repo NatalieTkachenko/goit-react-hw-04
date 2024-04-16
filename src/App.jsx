@@ -1,6 +1,5 @@
 // === Библиотечные модули ===
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 // ===Компоненты проекта===
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
@@ -10,6 +9,9 @@ import LoadMoreButton from "./components/LoadMoreButton/LoadMoreButton";
 import SearchBar from "./components/SearchBar/SearchBar";
 import ImageModal from "./components/ImageModal/ImageModal";
 
+// === Services ===
+import fetchData from "./services/API";
+
 function App() {
   const [photosToShow, setPhotosToShow] = useState(null);
   const [page, setPage] = useState(0);
@@ -18,7 +20,7 @@ function App() {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
-  const [bigImage, setBigImage] = useState(null);
+  const [bigImage, setBigImage] = useState({});
 
   const handleQuery = (searchTerm) => {
     setQuery(searchTerm);
@@ -30,24 +32,16 @@ function App() {
     setPage((prev) => prev + 1);
   };
 
-  const API_KEY = "S1N3fDA23y_hQUTZth1WPkovmsIIT0wVqJFI2s7qIiI";
-
-  const instance = axios.create({
-    baseURL: "https://api.unsplash.com/",
-  });
-
   useEffect(() => {
-    const fetchData = async (query, page) => {
-      if (!query) return;
+    if (!query) return;
 
-      setIsLoading(true);
+    const asyncWrapper = async (query, page) => {
       try {
-        const response = await instance.get(
-          `search/photos/?client_id=${API_KEY}&query=${query}&page=${page}&per_page=12`,
-        );
-        setTotal_pages(response.data.total_pages);
+        const response = await fetchData(query, page);
+        
 
-        setPhotosToShow((prev) => [...prev, ...response.data.results]);
+        setTotal_pages(response.total_pages);
+        setPhotosToShow((prev) => [...prev, ...response.results]);
       } catch (error) {
         setError("true");
       } finally {
@@ -55,7 +49,7 @@ function App() {
       }
     };
 
-    fetchData(query, page);
+    asyncWrapper(query, page);
   }, [query, page]);
 
   // === Управление модальным окном ===

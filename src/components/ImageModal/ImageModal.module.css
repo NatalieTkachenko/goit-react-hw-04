@@ -1,12 +1,7 @@
-.modal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-height: 100vh;
-  max-width: 100vw;
-}
 .modalImage {
   display: block;
   width: 100%;
-  height: 600px;
+  height: auto;
+  object-fit: contain;
+  overflow: hidden;
 }
