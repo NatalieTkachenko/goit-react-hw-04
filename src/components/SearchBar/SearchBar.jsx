@@ -13,7 +13,7 @@ export default function SearchBar({ handleQuery }) {
   const notify = () => toast("Please enter the search criteria");
 
   const handleChange = (event) => {
-    setSearchCriteria(event.target.value.trim());
+    setSearchCriteria(event.target.value);
   };
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -23,7 +23,7 @@ export default function SearchBar({ handleQuery }) {
     } else {
       handleQuery(searchCriteria);
       setSearchCriteria("");
-      event.target.reset();
+      
     }
   };
 

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import Loader from "./components/Loader/Loader";
-import LoadMoreButton from "./components/LoadMoreButton/LoadMoreButton";
+import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import SearchBar from "./components/SearchBar/SearchBar";
 import ImageModal from "./components/ImageModal/ImageModal";
 
@@ -17,7 +17,7 @@ function App() {
   const [page, setPage] = useState(0);
   const [query, setQuery] = useState("");
   const [total_pages, setTotal_pages] = useState(0);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
   const [bigImage, setBigImage] = useState({});
@@ -35,15 +35,16 @@ function App() {
   useEffect(() => {
     if (!query) return;
 
+    setIsLoading(true);
+
     const asyncWrapper = async (query, page) => {
       try {
         const response = await fetchData(query, page);
-        
 
         setTotal_pages(response.total_pages);
         setPhotosToShow((prev) => [...prev, ...response.results]);
       } catch (error) {
-        setError("true");
+        setError(error);
       } finally {
         setIsLoading(false);
       }
@@ -68,11 +69,12 @@ function App() {
       {Array.isArray(photosToShow) && (
         <ImageGallery gallery={photosToShow} handleModal={openModal} />
       )}
+       {isLoading && <Loader />}
 
       {page < total_pages && (
-        <LoadMoreButton handleLoadMore={handleSearchPage} />
+        <LoadMoreBtn handleLoadMore={handleSearchPage} />
       )}
-      {isLoading && <Loader />}
+     
       {error && <ErrorMessage />}
       {modalIsOpen && (
         <ImageModal
